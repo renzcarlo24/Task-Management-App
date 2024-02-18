@@ -30,7 +30,7 @@ class AddTask extends StatelessWidget {
         Column(
 
            children: [
-            const SizedBox(height: 60,),
+            const SizedBox(height: 40,),
             IconButton(onPressed: (){}, 
             icon: Icon(Icons.arrow_back,
             color: AppColors.secondaryColor,

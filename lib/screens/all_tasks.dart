@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/utils/app_colors.dart';
+import 'package:task_management_app/widgets/button_widget.dart';
 import 'package:task_management_app/widgets/task_widget.dart';
 
 class AllTasks extends StatelessWidget {
@@ -13,6 +15,24 @@ class AllTasks extends StatelessWidget {
       "Try harder",
       "Try smarter"
     ];
+    final leftEditIcon = Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      color: Color(0xFF2e3253).withOpacity(0.5),
+      child: Icon(
+        Icons.edit,
+        color: Colors.white,
+      ),
+      alignment: Alignment.centerLeft,
+    );
+    final rightDeleteIcon = Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      color: Colors.redAccent,
+      child: const Icon(
+        Icons.delete,
+        color: Colors.white,
+      ),
+      alignment: Alignment.centerRight,
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -21,7 +41,12 @@ class AllTasks extends StatelessWidget {
             padding: const EdgeInsets.only(left:20, top:60),
             alignment: Alignment.topLeft,
             // ignore: sort_child_properties_last
-            child: Icon(Icons.arrow_back, color: AppColors.secondaryColor),
+            child: InkWell(
+              onTap: (){
+                Get.back();
+              },
+            child: Icon(Icons.arrow_back, color: AppColors.secondaryColor,),
+            ),
             width:  double.maxFinite,
             height: MediaQuery.of(context).size.height/3.2,
             decoration: const BoxDecoration(
@@ -66,6 +91,48 @@ class AllTasks extends StatelessWidget {
             itemCount: myData.length,
             itemBuilder: (context, index){
             return Dismissible(
+              background: leftEditIcon,
+              secondaryBackground: rightDeleteIcon,
+              onDismissed: (DismissDirection direction){
+                print("after dismiss");
+              },
+              confirmDismiss: (DismissDirection direction)async{
+                if(direction==DismissDirection.startToEnd){
+                  showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    barrierColor: Colors.transparent,
+                    context: context,
+                   builder: (_){
+                    return Container(
+                      height: 550,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2e3253).withOpacity(0.4),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(20)
+                        )
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ButtonWidget(backgroundcolor: 
+                            AppColors.mainColor, text: "View", 
+                            textColor: Colors.white),
+                            SizedBox(height: 20,),
+                            ButtonWidget(backgroundcolor: 
+                            AppColors.mainColor, text: "View", 
+                            textColor: Colors.white)
+                        ],),
+                      ),
+                    );
+                   }); 
+                  return false;
+                }else{
+                  return Future.delayed(Duration(seconds: 1),()=>direction==DismissDirection.endToStart);
+                }
+              },
               key: ObjectKey(index),
               child: Container(
                 margin: const EdgeInsets.only(left:20, right: 20, bottom: 10),
