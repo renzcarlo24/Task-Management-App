@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_management_app/Controllers/data_controller.dart';
+import 'package:task_management_app/screens/all_tasks.dart';
 import 'package:task_management_app/utils/app_colors.dart';
 import 'package:task_management_app/widgets/button_widget.dart';
 import 'package:task_management_app/widgets/error_warning_ms.dart';
@@ -75,7 +77,14 @@ class AddTask extends StatelessWidget {
             const SizedBox(height: 20,),
             GestureDetector(
                 onTap: (){
-                  _dataValidation();
+                  if(_dataValidation());{
+                      Get.find<DataController>().postData(
+                          nameController.text.trim(),
+                          detailController.text.trim());
+                      Get.to(()=> AllTasks(),
+                      transition: Transition.circularReveal,
+                      );
+                  }
                 },
               child: ButtonWidget(backgroundcolor: AppColors.mainColor,
               text: "Add", textColor: Colors.white),
